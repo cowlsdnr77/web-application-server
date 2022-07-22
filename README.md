@@ -32,7 +32,7 @@
 * Http 응답 헤더의 Location 의 경로에 따라 redirect 함
 
 ### 요구사항 5 - cookie
-* 
+* 완료
 
 ### 요구사항 6 - stylesheet 적용
 * 
