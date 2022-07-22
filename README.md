@@ -26,7 +26,7 @@
 * String.startWith(String prefix) - prefix 로 시작하는지 확인하는 메소드
 
 ### 요구사항 3 - post 방식으로 회원가입
-* 
+* 완료
 
 ### 요구사항 4 - redirect 방식으로 이동
 * 

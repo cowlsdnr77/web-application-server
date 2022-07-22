@@ -3,12 +3,14 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import util.IOUtils;
 
 import static util.HttpRequestUtils.*;
 
@@ -29,16 +31,32 @@ public class RequestHandler extends Thread {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line = br.readLine();
+            if (line == null) {
+                return;
+            }
             log.debug("request line : {}", line);
 
             String url = getUrl(line);
+            HashMap<String, String> headers = new HashMap<>();
+
+            while (!line.equals("")) {
+                log.debug("header: {}", line);
+                line = br.readLine();
+                String[] headerTokens = line.split(": ");
+                if (headerTokens.length == 2) {
+                    headers.put(headerTokens[0], headerTokens[1]);
+                }
+            }
+
+            log.debug("Content-Length : {}", headers.get("Content-Length"));
 
             if (url.startsWith("/user/create")) {
-                int index = url.indexOf("?");
-                String requestParams = url.substring(index + 1);
-                Map<String, String> queryStringMap = parseQueryString(requestParams);
-                User user = new User(queryStringMap.get("userId"), queryStringMap.get("password"), queryStringMap.get("name"), queryStringMap.get("email"));
+                String requestBody = IOUtils.readData(br, Integer.parseInt(headers.get("Content-Length")));
+                log.debug("requestBody : {}", requestBody);
+                Map<String, String> requestParams = parseQueryString(requestBody);
+                User user = new User(requestParams.get("userId"), requestParams.get("password"), requestParams.get("name"), requestParams.get("email"));
                 log.debug("user = {}", user);
+
                 url = "/index.html";
             }
 
