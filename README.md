@@ -23,7 +23,7 @@
   * 요청 url의 파일을 바이트 단위로 읽어오는 방법
 
 ### 요구사항 2 - get 방식으로 회원가입
-* 
+* String.startWith(String prefix) - prefix 로 시작하는지 확인하는 메소드
 
 ### 요구사항 3 - post 방식으로 회원가입
 * 

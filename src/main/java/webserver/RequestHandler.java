@@ -3,10 +3,14 @@ package webserver;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.Map;
 
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+
+import static util.HttpRequestUtils.*;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,7 +31,16 @@ public class RequestHandler extends Thread {
             String line = br.readLine();
             log.debug("request line : {}", line);
 
-            String url = HttpRequestUtils.getUrl(line);
+            String url = getUrl(line);
+
+            if (url.startsWith("/user/create")) {
+                int index = url.indexOf("?");
+                String requestParams = url.substring(index + 1);
+                Map<String, String> queryStringMap = parseQueryString(requestParams);
+                User user = new User(queryStringMap.get("userId"), queryStringMap.get("password"), queryStringMap.get("name"), queryStringMap.get("email"));
+                log.debug("user = {}", user);
+                url = "/index.html";
+            }
 
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             DataOutputStream dos = new DataOutputStream(out);
