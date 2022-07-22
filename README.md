@@ -29,7 +29,7 @@
 * 완료
 
 ### 요구사항 4 - redirect 방식으로 이동
-* 
+* Http 응답 헤더의 Location 의 경로에 따라 redirect 함
 
 ### 요구사항 5 - cookie
 * 
